@@ -22,6 +22,8 @@ rumd URLs
 
 [x] Use `self` and `super` when communicating among modules
 
+[x] Use basic pattern matching when working with `regex` crate
+
 ## Credit:
 
 - A special thank to my mentor [Lukas Kalbertodt](https://github.com/LukasKalbertodt)
