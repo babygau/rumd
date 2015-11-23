@@ -7,9 +7,8 @@ struct Vimeo;
 impl Downloader for Vimeo {
   fn can_handle(url: &str) -> bool {
     let test = Regex::new(r"^(https://vimeo.com)").unwrap();
-    let res = test.is_match(url);
-    match res {
-      bool => bool
+    match test.is_match(url) {
+      val => val
     }
   }
 }
