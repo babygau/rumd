@@ -1,17 +1,25 @@
 use regex::Regex;
 use super::Downloader;
 
-struct YouTube;
+pub struct YouTube;
 
 // Reference from: https://github.com/regexps/youtube-regex
 impl Downloader for YouTube {
-  fn can_handle(url: &str) -> bool {
+
+  fn id(&self) -> &str {
+    "YouTube Plugin"
+  }
+
+  fn can_handle(&self, url: &str) -> bool {
+
     let test = Regex::new(r"(?:youtube\.com/\S*(?:(?:/e(?:mbed))?/|watch/?\?(?:\S*?&?v=))|youtu\.be/)([a-zA-Z0-9_-]{6,11})").unwrap();
+
     match test.is_match(url) {
       val => val
     }
   }
 }
+
 
 #[test]
 fn youtube_can_handle() {

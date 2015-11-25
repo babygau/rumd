@@ -1,13 +1,19 @@
 use regex::Regex;
 use super::Downloader;
 
-struct Vimeo;
-
+pub struct Vimeo;
 
 // Reference from: https://github.com/regexps/youtube-regex
 impl Downloader for Vimeo {
-  fn can_handle(url: &str) -> bool {
+
+  fn id(&self) -> &str {
+    "Vimeo Plugin"
+  }
+
+  fn can_handle(&self, url: &str) -> bool {
+
     let test = Regex::new(r"(?:http|https)?://(?:www\.)?vimeo.com/((?:channels/(?:\w+/)?|groups/(?:[^/]*)/videos/?|album/(?:[^/]*)/video/)|(\d+)|(?:/\?))").unwrap();
+
     match test.is_match(url) {
       val => val
     }
