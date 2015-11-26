@@ -1,11 +1,11 @@
 extern crate regex;
 extern crate hyper;
 
+mod net;
+
 use net::*;
 use std::env;
 use std::process::exit;
-
-mod net;
 
 fn main() {
 
@@ -19,21 +19,18 @@ fn main() {
 
     match () {
 
-      _ if YouTube::is_link_valid(&url) => downloader = Box::new(YouTube) as Box<Downloader>,
+        _ if YouTube::is_link_valid(&url) => downloader = Box::new(YouTube) as Box<Downloader>,
 
-      _ if Vimeo::is_link_valid(&url) => downloader = Box::new(Vimeo) as Box<Downloader>,
+        _ if Vimeo::is_link_valid(&url) => downloader = Box::new(Vimeo) as Box<Downloader>,
 
-      _ => {
+        _ => {
 
-        println!("Bad news! I need to double check my link, it appears that link is invalid");
-        exit(0); // Exit the program
+            println!("Bad news! I need to double check my link, it appears that link is invalid");
+            exit(0); // Exit the program
 
-      },
+        },
     };
 
     println!("Good news, link will now be processed by: {}", downloader.name());
-
-
+    
 }
-
-
