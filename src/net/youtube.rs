@@ -3,21 +3,24 @@ use super::Downloader;
 
 pub struct YouTube;
 
-// Reference from: https://github.com/regexps/youtube-regex
-impl Downloader for YouTube {
+impl YouTube {
 
-  fn id(&self) -> &str {
-    "YouTube Plugin"
-  }
-
-  fn can_handle(&self, url: &str) -> bool {
+  pub fn is_link_valid(url: &str) -> bool where Self: Sized {
 
     let test = Regex::new(r"(?:youtube\.com/\S*(?:(?:/e(?:mbed))?/|watch/?\?(?:\S*?&?v=))|youtu\.be/)([a-zA-Z0-9_-]{6,11})").unwrap();
 
-    match test.is_match(url) {
-      val => val
-    }
+    test.is_match(url)
   }
+
+}
+
+// Reference from: https://github.com/regexps/youtube-regex
+impl Downloader for YouTube {
+
+  fn name(&self) -> &str {
+    "YouTube Plugin"
+  }
+
 }
 
 
@@ -84,11 +87,12 @@ fn youtube_can_handle() {
     "but we work at youtu.be and /thisweird video"
   ];
 
+
   for valid_url in valid_youtube_urls {
-    assert_eq!(YouTube::can_handle(valid_url), true);
+    assert_eq!(YouTube::is_link_valid(valid_url), true);
   }
 
   for invalid_url in not_valid_youtube_urls {
-    assert_eq!(YouTube::can_handle(invalid_url), false)
+    assert_eq!(YouTube::is_link_valid(invalid_url), false)
   }
 }

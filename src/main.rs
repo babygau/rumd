@@ -3,6 +3,7 @@ extern crate hyper;
 
 use net::*;
 use std::env;
+use std::process::exit;
 
 mod net;
 
@@ -10,31 +11,29 @@ fn main() {
 
     // Get input from CLI
     // `env::args()` return `Args` struct
-    // `Args` implement `Iterator` trait methods
-    let url = env::args().nth(1);
-    match url {
-    	Some(val) => {
-      for downloader in list_of_downloaders() {
-  				match downloader.can_handle(&val) {
-  					true => println!("URL: {} \nDetected by {}", val, downloader.id()),
-  					false => continue
-  				}
-  			}
-  		},
+    let url = env::args().nth(1).unwrap_or("Bad news! I forget to send link to program\nI am well aware that I will have to do it again.\n".to_string());
 
-  		None => panic!("Ahhhh")
+    println!("URL: {}", url);
 
-  	}
+    let downloader: Box<Downloader>;
 
+    match () {
 
-}
+      _ if YouTube::is_link_valid(&url) => downloader = Box::new(YouTube) as Box<Downloader>,
 
-fn list_of_downloaders() -> Vec<Box<Downloader>> {
+      _ if Vimeo::is_link_valid(&url) => downloader = Box::new(Vimeo) as Box<Downloader>,
 
-		let list: Vec<Box<Downloader>> = vec![
-			Box::new(YouTube),
-			Box::new(Vimeo),
-		];
-		list
+      _ => {
+
+        println!("Bad news! I need to double check my link, it appears that link is invalid");
+        exit(0); // Exit the program
+
+      },
+    };
+
+    println!("Good news, link will now be processed by: {}", downloader.name());
+
 
 }
+
+

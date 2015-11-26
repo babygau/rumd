@@ -3,21 +3,24 @@ use super::Downloader;
 
 pub struct Vimeo;
 
-// Reference from: https://github.com/regexps/youtube-regex
-impl Downloader for Vimeo {
+impl Vimeo {
 
-  fn id(&self) -> &str {
-    "Vimeo Plugin"
-  }
-
-  fn can_handle(&self, url: &str) -> bool {
+  pub fn is_link_valid(url: &str) -> bool {
 
     let test = Regex::new(r"(?:http|https)?://(?:www\.)?vimeo.com/((?:channels/(?:\w+/)?|groups/(?:[^/]*)/videos/?|album/(?:[^/]*)/video/)|(\d+)|(?:/\?))").unwrap();
 
-    match test.is_match(url) {
-      val => val
-    }
+    test.is_match(url)
   }
+
+}
+
+// Reference from: https://github.com/regexps/youtube-regex
+impl Downloader for Vimeo {
+
+  fn name(&self) -> &str {
+    "Vimeo Plugin"
+  }
+
 }
 
 #[test]
@@ -45,11 +48,12 @@ fn vimeo_can_handle() {
     "https://vimeo.com.omomom/62092214?query=foo"
   ];
 
+
   for valid_url in valid_vimeo_urls {
-    assert_eq!(Vimeo::can_handle(valid_url), true);
+    assert_eq!(Vimeo::is_link_valid(valid_url), true);
   }
 
   for invalid_url in not_valid_vimeo_urls {
-    assert_eq!(Vimeo::can_handle(invalid_url), false)
+    assert_eq!(Vimeo::is_link_valid(invalid_url), false)
   }
 }
